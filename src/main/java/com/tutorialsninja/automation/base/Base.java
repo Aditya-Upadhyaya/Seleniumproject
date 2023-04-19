@@ -1,48 +1,80 @@
 package com.tutorialsninja.automation.base;
 
-import org.openqa.selenium.WebDriver;
+import java.io.FileInputStream;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import com.tutorialsninja.automation.config.ConfigurationReader;
-import com.tutorialsninja.automation.config.PropertyFileReader;
-import com.tutorialsninja.automation.framework.Browser;
-import com.tutorialsninja.automation.util.PathHelper;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
-import cucumber.api.Scenario;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 
 public class Base {
-	
-	public static Logger log=Logger.getLogger(Base.class);
-	
 	public static WebDriver driver;
-	public static ConfigurationReader reader;
+	public static Properties prop;
+	public static Logger log = Logger.getLogger(Base.class);
 	
-	
-	
-	
-	
-	@Before
-	public void setUp(Scenario scenario){
-		log.info("Scenario Started: "+scenario.getName());
-		PropertyConfigurator.configure(PathHelper.getResourcePath("/src/main/resources/ConfigurationFile/log4j.properties"));
-		reader=new PropertyFileReader();
-		Browser.startBrowser();
-		Browser.maximize();
+	//To call different browsers
+	public static void driverSetup()
+	{
+		prop=new Properties();
+		
+		try 
+		{
+			prop.load(new FileInputStream("src/main/java/Config/config.properties"));
+		}	
+		 catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		
+		//To Open Chrome Browser
+		if(prop.getProperty("browserName").matches("chrome"))
+		{
+			WebDriverManager.chromedriver().setup();
+			driver=new ChromeDriver();
+		}
+		
+		//To Open Firefox Browser
+		if(prop.getProperty("browserName").matches("firefox"))
+		{
+			WebDriverManager.firefoxdriver().setup();
+			driver=new FirefoxDriver();
+		}
+		
+		
+		//To maximize the Browser Window
+		driver.manage().window().maximize();
+		driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+		
 	}
 	
-	@After
-	public void closeBrowser(Scenario scenario){
-		if(scenario.isFailed()){
-			scenario.embed(Browser.takeScreenshot(), "image/png");
-		}
-		log.info("Scenario Completed: "+scenario.getName());
-		log.info("Scenario Status is: "+scenario.getStatus());
-		Base.driver.quit();
-		}
+	public static void closeBrowser()
+	{
+
+		driver.quit();
 	}
+	
+	public static byte[] takeScreenshot() {
+		try {
+			return ((TakesScreenshot)Base.driver).getScreenshotAs(OutputType.BYTES);
+		}
+		catch(Exception e){
+			log.info("Exception has Occured while taking screenshot");
+			return null;
+		}
 
+		
 
+	}
+	
+
+}
