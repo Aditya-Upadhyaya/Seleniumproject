@@ -24,11 +24,12 @@ public class Base {
 	//To call different browsers
 	public static void driverSetup()
 	{
+		
 		prop=new Properties();
 		
 		try 
 		{
-			prop.load(new FileInputStream("src/main/java/Config/config.properties"));
+			prop.load(new FileInputStream("src/main/java/com/tutorialsninja/automation/config/config.properties"));
 		}	
 		 catch (Exception e) 
 		{
@@ -54,14 +55,10 @@ public class Base {
 		driver.manage().window().maximize();
 		driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
 		driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
-		
+		System.out.println(driver.getCurrentUrl());
 	}
 	
-	public static void closeBrowser()
-	{
-
-		driver.quit();
-	}
+	
 	
 	public static byte[] takeScreenshot() {
 		try {
