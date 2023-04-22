@@ -5,12 +5,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class AccountPage {
-	public AccountPage(WebDriver driver) {
+public class MyAccountPage {
+
+	public MyAccountPage(WebDriver driver) {
 		PageFactory.initElements(driver, this);
 	}
-
-	@FindBy(linkText = "Success")
-	public static WebElement success;
+	
+	@FindBy(linkText = "Register for an affiliate account")
+	public static WebElement registerAffiliate;
 	
 }

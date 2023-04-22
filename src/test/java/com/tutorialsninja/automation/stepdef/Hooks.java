@@ -15,13 +15,13 @@ public class Hooks {
 	
 	@Before
 	public void setUp(Scenario scenario){
-	System.out.println("***** 1 *****");
+	
 		Base.driverSetup();
 	
 	}
 	@After
 	public void closeBrowser(Scenario scenario){
-		System.out.println("**** hook after ****");
+		
 	if(scenario.isFailed()){
 	scenario.embed(Base.takeScreenshot(), "image/png");
 	}
