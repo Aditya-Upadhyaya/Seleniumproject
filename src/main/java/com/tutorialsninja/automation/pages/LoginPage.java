@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import com.tutorialsninja.automation.base.Base;
+
 public class LoginPage {
 	public LoginPage(WebDriver driver) {
 		PageFactory.initElements(driver, this);
@@ -28,9 +30,21 @@ public class LoginPage {
 	@FindBy(css = "div[class*='alert']")
 	public static WebElement mainwarning;
 	
+	@FindBy(xpath = "//input[@value=\"Login\"]")
+	public static WebElement logIn;
+	
 	public static void doLogin(String arg1, String arg2) {
 		LoginPage.emailfield.sendKeys(arg1);
 		LoginPage.passwordfield.sendKeys(arg2);
 		LoginPage.submitbutton.click();	
+		
+	}
+	
+	public static void doLogin() {
+		Header.myaccount.click();
+		Header.loginIn.click();
+		emailfield.sendKeys(Base.prop.getProperty("username"));
+		passwordfield.sendKeys(Base.prop.getProperty("pass"));
+		LoginPage.logIn.click();
 	}
 }

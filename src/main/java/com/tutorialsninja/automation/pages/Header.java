@@ -21,4 +21,16 @@ public class Header {
 	@FindBy(linkText = "Login")
 	public static WebElement loginIn;
 	
+	@FindBy(name = "search")
+	public static WebElement searchbox;
+	
+	@FindBy(css="button[class*=\"btn-default\"]")
+	public static WebElement searchButton;
+	
+	@FindBy(xpath = "//span[text()=\"Shopping Cart\"]")
+	public static WebElement shoppingcart;
+	
+	public static void navigateToShoppingcart() {
+		shoppingcart.click();
+	}
 }
